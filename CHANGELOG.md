@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- `NativeTextViewWrapper.onMarkdownLinkClick`: a click on `[text](target)` or a
+  bare URL hands the target, as written in the source, to the embedder. Return
+  `true` to handle it (for example to open a relative path as another
+  document); `false` lets the system open the link.
+
 ## [0.11.0] - 2026-07-31
 
 ### Added
