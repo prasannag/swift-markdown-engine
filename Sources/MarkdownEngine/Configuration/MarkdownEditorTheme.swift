@@ -79,6 +79,11 @@ public struct MarkdownEditorTheme: Sendable {
     /// Background color used for `==highlight==` inline markup.
     public var highlightColor: NSColor
 
+    // MARK: Tasks
+
+    /// Color of a checked task box (`[x]`). `nil` draws it in `bodyText`.
+    public var checkedTaskCheckbox: NSColor?
+
     // MARK: Init
 
     public init(
@@ -93,7 +98,8 @@ public struct MarkdownEditorTheme: Sendable {
         latexLightModeText: NSColor = .black,
         latexDarkModeText: NSColor = .white,
         strikethroughColor: NSColor = .labelColor,
-        highlightColor: NSColor = .systemOrange.withAlphaComponent(0.4)
+        highlightColor: NSColor = .systemOrange.withAlphaComponent(0.4),
+        checkedTaskCheckbox: NSColor? = nil
     ) {
         self.bodyText = bodyText
         self.mutedText = mutedText
@@ -107,6 +113,24 @@ public struct MarkdownEditorTheme: Sendable {
         self.latexDarkModeText = latexDarkModeText
         self.strikethroughColor = strikethroughColor
         self.highlightColor = highlightColor
+        self.checkedTaskCheckbox = checkedTaskCheckbox
+    }
+
+    /// Color a task box is drawn in: `checkedTaskCheckbox` (falling back to
+    /// `bodyText`) when checked, `mutedText` when not.
+    public func taskCheckboxColor(isChecked: Bool) -> NSColor {
+        isChecked ? (checkedTaskCheckbox ?? bodyText) : mutedText
+    }
+
+    /// Attributes the text view draws finished links with. Without them
+    /// `NSTextView` paints every `.link` run in its own blue, overriding `link`.
+    @MainActor
+    public var linkTextAttributes: [NSAttributedString.Key: Any] {
+        [
+            .foregroundColor: link,
+            .underlineStyle: NSUnderlineStyle.single.rawValue,
+            .cursor: NSCursor.pointingHand,
+        ]
     }
 
     /// System-native palette built from `NSColor` dynamic system colors.

@@ -651,7 +651,7 @@ final class MarkdownTextLayoutFragment: NSTextLayoutFragment {
             if let baseSymbol = NSImage(systemSymbolName: symbolName, accessibilityDescription: nil)
                 ?? NSImage(systemSymbolName: fallbackName, accessibilityDescription: nil) {
                 let sizeConfig = NSImage.SymbolConfiguration(pointSize: iconRect.height, weight: .regular)
-                let tint = isChecked ? configuration.theme.bodyText : configuration.theme.mutedText
+                let tint = configuration.theme.taskCheckboxColor(isChecked: isChecked)
                 let colorConfig = NSImage.SymbolConfiguration(hierarchicalColor: tint)
                 let symbolConfig = sizeConfig.applying(colorConfig)
                 let symbol = baseSymbol.withSymbolConfiguration(symbolConfig) ?? baseSymbol

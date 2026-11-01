@@ -251,6 +251,7 @@ public struct NativeTextViewWrapper: NSViewRepresentable {
         textView.minOverscrollPoints = configuration.overscroll.minPoints
         context.coordinator.configuration = configuration
         textView.insertionPointColor = configuration.theme.bodyText
+        textView.linkTextAttributes = configuration.theme.linkTextAttributes
         textView.isEditable = isEditable
         textView.isSelectable = true
         textView.isRichText = true
