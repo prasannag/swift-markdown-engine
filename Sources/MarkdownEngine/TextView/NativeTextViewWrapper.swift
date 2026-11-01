@@ -509,6 +509,8 @@ public struct NativeTextViewWrapper: NSViewRepresentable {
             || abs(textView.textContainerInset.height - desiredTextInset.height) > 0.5 {
             textView.textContainerInset = desiredTextInset
         }
+        // Sync the theme so an embedder colour change recolours the open text.
+        context.coordinator.applyTheme(configuration.theme, to: textView)
         // Refresh services/theme when the embedder hands us a new configuration
         // (e.g. when the available wiki-link targets change). Cheap pointer-/
         // value-based comparison; full equality isn't required because the

@@ -395,6 +395,25 @@ extension NativeTextViewCoordinator {
         return paragraphs
     }
 
+    /// Adopts a theme the embedder changed while a document is open: restyles
+    /// the text, re-themes link attributes, and redraws fragment-drawn glyphs
+    /// (task boxes, strikethroughs). Returns whether the theme differed.
+    @MainActor @discardableResult
+    func applyTheme(_ theme: MarkdownEditorTheme, to textView: NativeTextView) -> Bool {
+        guard theme != configuration.theme else { return false }
+        configuration.theme = theme
+        textView.configuration.theme = theme
+        textView.linkTextAttributes = theme.linkTextAttributes
+        let fullRange = NSRange(location: 0, length: (textView.string as NSString).length)
+        if fullRange.length > 0 {
+            restyleParagraphs([fullRange], in: textView)
+        }
+        if let tlm = textView.textLayoutManager {
+            tlm.invalidateLayout(for: tlm.documentRange)
+        }
+        return true
+    }
+
     func restyleParagraphs(_ paragraphs: [NSRange], in textView: NSTextView) {
         let docText = textView.string      // one O(doc) bridge, reused below
         let parsed = parsedDocument(for: docText)
